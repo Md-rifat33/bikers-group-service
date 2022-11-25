@@ -18,6 +18,14 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const categoriesCollection = client
+      .db('bikeResale')
+      .collection('categories')
+    app.get('/', async (req, res) => {
+      const query = {}
+      const cursor = await categoriesCollection.find(query).toArray()
+      res.send(cursor)
+    })
   } finally {
   }
 }
