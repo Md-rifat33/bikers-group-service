@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
+const { query } = require('express')
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 8000
@@ -23,6 +24,7 @@ async function run() {
       .collection('categories')
     const bookingsCollection = client.db('bikeResale').collection('bookings')
     const usersCollection = client.db('bikeResale').collection('users')
+    const reviewsCollection = client.db('bikeResale').collection('reviews')
     app.get('/', async (req, res) => {
       const query = {}
       const cursor = await categoriesCollection.find(query).toArray()
@@ -47,6 +49,12 @@ async function run() {
       const booking = req.body
       const result = await bookingsCollection.insertOne(booking)
       res.send(result)
+    })
+
+    app.get('/reviews', async (req, res) => {
+      const query = {}
+      const cursor = await reviewsCollection.find(query).toArray()
+      res.send(cursor)
     })
 
     app.get('/users', async (req, res) => {
